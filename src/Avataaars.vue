@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue'
 import { mouthTypes } from './assetsTypes/mouth'
 import { eyeTypes } from './assetsTypes/eyes'
 import { eyebrowTypes } from './assetsTypes/eyebrows'
@@ -108,88 +109,105 @@ import { GraphicShirtTypes } from './assetsTypes/graphic-shirt'
 import { hairColors, skinColors, hatAndShirtColors } from './assetsTypes/colors'
 
 export default {
-     props: {
-         isCircle: {
-            type: Boolean,
-            default: true
-         },
-         circleColor: {
-            type: String,
-             default: '#6fb8e0'
-        },
-        topType: { type: String, default: 'random' },
-        accessoriesType: { type: String, default: 'random'},
-        facialHairType: { type: String, default: 'random' },
-        clotheType: { type: String, default: 'random' },
-        eyeType: { type: String, default: 'random' },
-        eyebrowType: { type: String, default: 'random' },
-        mouthType: { type: String, default: 'random' },
-        skinColor: { type: String, default: 'random' },
-        graphicType: { type: String, default: 'random' },
-        hairColor: { type: String, default: 'random' },
-        facialHairColor: { type: String, default: 'random' },
-        topColor: { type: String, default: 'random' },
-        clotheColor: { type: String, default: 'random' },
-     },
-    methods: {
-        getRandomChoice (items) {
-            const itemsLength = Object.entries(items).length
-            return Object.entries(items)[Math.floor((Math.random()*(itemsLength)))][1]
-        }
+  props: {
+    isCircle: {
+      type: Boolean,
+      default: true
     },
-    data () {
-        return {
-            mouthTypes: mouthTypes,
-            eyeTypes: eyeTypes,
-            topTypes: topTypes,
-            clothesType: clothesType,
-            eyebrowTypes: eyebrowTypes,
-            facialHairTypes: facialHairTypes,
-            accessoriesTypes: accessoriesTypes,
-            GraphicShirtTypes: GraphicShirtTypes,
-            hatAndShirtColors: hatAndShirtColors,
-            hairColors: hairColors,
-            skinColors: skinColors,
-        }
+    circleColor: {
+      type: String,
+      default: '#6fb8e0'
     },
-    computed: {
-        cssVars () {
-          return {
-            '--avataaar-hair-color': this.hairColor === 'random' ? this.getRandomChoice(this.hairColors) : this.hairColors[this.hairColor],
-            '--avataaar-facial-hair-color': this.facialHairColor === 'random' ? this.getRandomChoice(this.hairColors) : this.hairColors[this.facialHairColor],
-            '--avataaar-hat-color': this.topColor === 'random' ? this.getRandomChoice(this.hatAndShirtColors) : this.hatAndShirtColors[this.topColor],
-            '--avataaar-shirt-color': this.clotheColor === 'random' ? this.getRandomChoice(this.hatAndShirtColors) : this.hatAndShirtColors[this.clotheColor],
+    topType: { type: String, default: 'random' },
+    accessoriesType: { type: String, default: 'random'},
+    facialHairType: { type: String, default: 'random' },
+    clotheType: { type: String, default: 'random' },
+    eyeType: { type: String, default: 'random' },
+    eyebrowType: { type: String, default: 'random' },
+    mouthType: { type: String, default: 'random' },
+    skinColor: { type: String, default: 'random' },
+    graphicType: { type: String, default: 'random' },
+    hairColor: { type: String, default: 'random' },
+    facialHairColor: { type: String, default: 'random' },
+    topColor: { type: String, default: 'random' },
+    clotheColor: { type: String, default: 'random' },
+  },
+  setup(props) {
+    const mouthTypes = ref(mouthTypes)
+    const eyeTypes = ref(eyeTypes)
+    const topTypes = ref(topTypes)
+    const clothesType = ref(clothesType)
+    const eyebrowTypes = ref(eyebrowTypes)
+    const facialHairTypes = ref(facialHairTypes)
+    const accessoriesTypes = ref(accessoriesTypes)
+    const GraphicShirtTypes = ref(GraphicShirtTypes)
+    const hatAndShirtColors = ref(hatAndShirtColors)
+    const hairColors = ref(hairColors)
+    const skinColors = ref(skinColors)
 
-          }
-        },
-        topTypeValue () {
-            return this.topType === 'random' ? this.getRandomChoice(Object.keys(this.topTypes)) : this.topType
-        },
-        accessoriesTypeValue () {
-            return this.accessoriesType === 'random' ? this.getRandomChoice(Object.keys(this.accessoriesTypes)) : this.accessoriesType
-        },
-        facialHairTypeValue () {
-            return this.facialHairType === 'random' ? this.getRandomChoice(Object.keys(this.facialHairTypes)) : this.facialHairType
-        },
-        clotheTypeValue () {
-            return this.clotheType === 'random' ? this.getRandomChoice(Object.keys(this.clothesType)) : this.clotheType
-        },
-        eyeTypeValue () {
-            return this.eyeType === 'random' ? this.getRandomChoice(Object.keys(this.eyeTypes)) : this.eyeType
-        },
-        eyebrowTypeValue () {
-            return this.eyebrowType === 'random' ? this.getRandomChoice(Object.keys(this.eyebrowTypes)) : this.eyebrowType
-        },
-        mouthTypeValue () {
-            return this.mouthType === 'random' ? this.getRandomChoice(Object.keys(this.mouthTypes)) : this.mouthType
-        },
-        skinColorValue () {
-            return this.skinColor === 'random' ? this.getRandomChoice(Object.keys(this.skinColors)) : this.skinColor
-        },
-        graphicTypeValue () {
-            return this.graphicType === 'random' ? this.getRandomChoice(Object.keys(this.GraphicShirtTypes)) : this.graphicType
-        }
+    const getRandomChoice = (items) => {
+      const itemsLength = Object.entries(items).length
+      return Object.entries(items)[Math.floor((Math.random()*(itemsLength)))][1]
     }
+
+    const cssVars = computed(() => {
+      return {
+        '--avataaar-hair-color': props.hairColor === 'random' ? getRandomChoice(hairColors.value) : hairColors.value[props.hairColor],
+        '--avataaar-facial-hair-color': props.facialHairColor === 'random' ? getRandomChoice(hairColors.value) : hairColors.value[props.facialHairColor],
+        '--avataaar-hat-color': props.topColor === 'random' ? getRandomChoice(hatAndShirtColors.value) : hatAndShirtColors.value[props.topColor],
+        '--avataaar-shirt-color': props.clotheColor === 'random' ? getRandomChoice(hatAndShirtColors.value) : hatAndShirtColors.value[props.clotheColor],
+      }
+    })
+
+    const topTypeValue = computed(() => {
+      return props.topType === 'random' ? getRandomChoice(Object.keys(topTypes.value)) : props.topType
+    })
+
+    const accessoriesTypeValue = computed(() => {
+      return props.accessoriesType === 'random' ? getRandomChoice(Object.keys(accessoriesTypes.value)) : props.accessoriesType
+    })
+
+    const facialHairTypeValue = computed(() => {
+      return props.facialHairType === 'random' ? getRandomChoice(Object.keys(facialHairTypes.value)) : props.facialHairType
+    })
+
+    const clotheTypeValue = computed(() => {
+      return props.clotheType === 'random' ? getRandomChoice(Object.keys(clothesType.value)) : props.clotheType
+    })
+
+    const eyeTypeValue = computed(() => {
+      return props.eyeType === 'random' ? getRandomChoice(Object.keys(eyeTypes.value)) : props.eyeType
+    })
+
+    const eyebrowTypeValue = computed(() => {
+      return props.eyebrowType === 'random' ? getRandomChoice(Object.keys(eyebrowTypes.value)) : props.eyebrowType
+    })
+
+    const mouthTypeValue = computed(() => {
+      return props.mouthType === 'random' ? getRandomChoice(Object.keys(mouthTypes.value)) : props.mouthType
+    })
+
+    const skinColorValue = computed(() => {
+      return props.skinColor === 'random' ? getRandomChoice(Object.keys(skinColors.value)) : props.skinColor
+    })
+
+    const graphicTypeValue = computed(() => {
+      return props.graphicType === 'random' ? getRandomChoice(Object.keys(GraphicShirtTypes.value)) : props.graphicType
+    })
+
+    return {
+      cssVars,
+      topTypeValue,
+      accessoriesTypeValue,
+      facialHairTypeValue,
+      clotheTypeValue,
+      eyeTypeValue,
+      eyebrowTypeValue,
+      mouthTypeValue,
+      skinColorValue,
+      graphicTypeValue
+    }
+  }
 }
 </script>
 
